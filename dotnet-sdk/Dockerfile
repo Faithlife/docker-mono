@@ -19,10 +19,10 @@ RUN apt-get update \
 
 RUN apt-get update \
   && apt-get install -y \
-    wget \
+    curl \
   && rm -rf /var/lib/apt/lists/*
 
-RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+RUN curl -LsSO https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
   && dpkg -i packages-microsoft-prod.deb \
   && rm packages-microsoft-prod.deb
 
