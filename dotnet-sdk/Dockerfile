@@ -1,23 +1,32 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
   && apt-get install -y \
-    apt-transport-https \
-    curl \
+    ca-certificates \
+    gnupg \
   && rm -rf /var/lib/apt/lists/*
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-  && echo "deb http://download.mono-project.com/repo/debian xenial/snapshots/5.8 main" > /etc/apt/sources.list.d/mono-xamarin.list
-
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
-RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list
-
-ARG DOTNET_SDK_VERSION=2.1.4
+  && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" > /etc/apt/sources.list.d/mono-official-stable.list
 
 RUN apt-get update \
   && apt-get install -y \
-    dotnet-sdk-${DOTNET_SDK_VERSION} \
     mono-devel \
     nuget \
     tzdata \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update \
+  && apt-get install -y \
+    wget \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+  && dpkg -i packages-microsoft-prod.deb \
+  && rm packages-microsoft-prod.deb
+
+RUN apt-get update \
+  && apt-get install -y \
+    dotnet-sdk-3.0 \
   && rm -rf /var/lib/apt/lists/*
