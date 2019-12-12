@@ -28,7 +28,7 @@ RUN curl -LsSO https://packages.microsoft.com/config/ubuntu/18.04/packages-micro
 
 RUN apt-get update \
   && apt-get install -y \
-    dotnet-sdk-3.0 \
+    dotnet-sdk-3.1 \
   && rm -rf /var/lib/apt/lists/*
 
 # Configure web servers to bind to port 80 when present
